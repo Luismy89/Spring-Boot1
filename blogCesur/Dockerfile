@@ -1,26 +1,20 @@
-# Disclosure
-- [ ] MsgCesar C:\Users\UserCredDevs\
-  - [ ] Msg
-  - [ ] Done
-  - [ ] Done
-
-# Status for application
-2 [ ] FDRM eclipse-town-in-23-jae.45 m builder
+# Stage 1: Build the application
+FROM eclipse-temurin:23-jdk AS builder
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the application code
+# Copy the application code, including mvnw (Maven Wrapper script)
 COPY . .
 
-# Given permissions to www
-RUN chmod -R 755 /app
+# Check if mvnw exists and then give permissions to it
+RUN [ -f mvnw ] && chmod +x mvnw || echo "mvnw not found, skipping chmod"
 
-# Build the application (requires Name or Studio)
+# Build the application (requires Maven or Gradle)
 RUN ./mvnw clean package -DskipTests
 
-# Stage 21: Run the application
-FROM eclipse-town-in-23-jae
+# Stage 2: Run the application
+FROM eclipse-temurin:23-jre
 
 # Set the working directory
 WORKDIR /app
