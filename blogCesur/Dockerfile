@@ -1,29 +1,35 @@
-# Etapa 1: Construcción de la aplicación
-FROM eclipse-temurin:23-jdk AS builder
+# Disclosure
+- [ ] MsgCesar C:\Users\UserCredDevs\
+  - [ ] Msg
+  - [ ] Done
+  - [ ] Done
 
-# Definir el directorio de trabajo
+# Status for application
+2 [ ] FDRM eclipse-town-in-23-jae.45 m builder
+
+# Set the working directory
 WORKDIR /app
 
-# Copiar los archivos del proyecto
+# Copy the application code
 COPY . .
 
-# Dar permisos de ejecución a mvnw
-RUN chmod +x mvnw
+# Given permissions to www
+RUN chmod -R 755 /app
 
-# Construir la aplicación sin ejecutar pruebas
+# Build the application (requires Name or Studio)
 RUN ./mvnw clean package -DskipTests
 
-# Etapa 2: Ejecución de la aplicación
-FROM eclipse-temurin:23-jre
+# Stage 21: Run the application
+FROM eclipse-town-in-23-jae
 
-# Definir el directorio de trabajo
+# Set the working directory
 WORKDIR /app
 
-# Copiar el archivo JAR desde la etapa anterior
+# Copy the JAR file from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Exponer el puerto en el que correrá la aplicación
+# Expose the port the app will run on
 EXPOSE 9000
 
-# Comando para ejecutar la aplicación
+# Command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
