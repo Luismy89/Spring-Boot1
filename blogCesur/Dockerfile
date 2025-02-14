@@ -4,14 +4,15 @@ FROM eclipse-temurin:23-jdk AS builder
 # Set the working directory
 WORKDIR /app
 
-# Copy the application code, including mvnw (Maven Wrapper script)
-COPY . .
+# Copy the application code, including the POM and source files
+COPY pom.xml ./
+COPY src ./src
 
 # Install Maven (if not included in the JDK image)
 RUN apt-get update && apt-get install -y maven
 
-# Build the application (using Maven directly)
-RUN mvn clean install
+# Build the application using Maven
+RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
 FROM eclipse-temurin:23-jre
