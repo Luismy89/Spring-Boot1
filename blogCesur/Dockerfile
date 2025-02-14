@@ -1,29 +1,29 @@
-# Stage 1: Build the application
+# Etapa 1: Construcción de la aplicación
 FROM eclipse-temurin:23-jdk AS builder
 
-# Set the working directory
+# Definir el directorio de trabajo
 WORKDIR /app
 
-# Copy the application code
+# Copiar los archivos del proyecto
 COPY . .
 
-# Given permissions to mvnw
+# Dar permisos de ejecución a mvnw
 RUN chmod +x mvnw
 
-# Build the application (requires Maven or Gradle)
+# Construir la aplicación sin ejecutar pruebas
 RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Run the application
+# Etapa 2: Ejecución de la aplicación
 FROM eclipse-temurin:23-jre
 
-# Set the working directory
+# Definir el directorio de trabajo
 WORKDIR /app
 
-# Copy the JAR file from the builder stage
+# Copiar el archivo JAR desde la etapa anterior
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the port the app will run on
+# Exponer el puerto en el que correrá la aplicación
 EXPOSE 9000
 
-# Command to run the application
+# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
