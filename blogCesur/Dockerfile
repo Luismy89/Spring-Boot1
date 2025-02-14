@@ -7,11 +7,11 @@ WORKDIR /app
 # Copy the application code, including mvnw (Maven Wrapper script)
 COPY . .
 
-# Check if mvnw exists and then give permissions to it
-RUN [ -f mvnw ] && chmod +x mvnw || echo "mvnw not found, skipping chmod"
+# Install Maven (if not included in the JDK image)
+RUN apt-get update && apt-get install -y maven
 
-# Build the application (requires Maven or Gradle)
-RUN ./mvnw clean package -DskipTests
+# Build the application (using Maven directly)
+RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
 FROM eclipse-temurin:23-jre
