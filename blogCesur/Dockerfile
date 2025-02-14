@@ -11,7 +11,7 @@ COPY . .
 RUN apt-get update && apt-get install -y maven
 
 # Build the application (using Maven directly)
-RUN mvn clean package -DskipTests
+RUN mvn clean install
 
 # Stage 2: Run the application
 FROM eclipse-temurin:23-jre
